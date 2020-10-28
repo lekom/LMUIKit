@@ -1,3 +1,5 @@
-struct LMUIKit {
-    var text = "Hello, World!"
-}
+//
+//  LMUIKit.swift
+//  Copyright © 2020 Leko Murphy. All rights reserved.
+//
+
