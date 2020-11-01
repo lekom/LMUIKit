@@ -42,22 +42,21 @@ public class LMBottomSheetPresentationController: UIPresentationController {
         guard let containerView = containerView,
               let presentedView = presentedView else { return .zero }
                 
-        let safeAreaFrame = containerView.bounds
-            .inset(by: containerView.safeAreaInsets)
+        let frame = containerView.bounds
         
-        let targetWidth = safeAreaFrame.width - 2 * widthInset
+        let targetWidth = frame.width - 2 * widthInset
         let fittingSize = CGSize(width: targetWidth, height: UIView.layoutFittingCompressedSize.height)
         
         let targetHeight = presentedView.systemLayoutSizeFitting(fittingSize,
                                                                  withHorizontalFittingPriority: .required,
                                                                  verticalFittingPriority: .defaultLow).height
         
-        var frame = safeAreaFrame
-        frame.origin.x += widthInset
-        frame.origin.y += frame.size.height - targetHeight
-        frame.size.width = targetWidth
-        frame.size.height = targetHeight
-        return frame
+        var finalFrame = frame
+        finalFrame.origin.x += widthInset
+        finalFrame.origin.y += finalFrame.size.height - targetHeight
+        finalFrame.size.width = targetWidth
+        finalFrame.size.height = targetHeight
+        return finalFrame
     }
     
     @objc private func grayBackgroundTapped() {
