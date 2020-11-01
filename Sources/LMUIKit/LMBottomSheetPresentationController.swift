@@ -42,7 +42,10 @@ public class LMBottomSheetPresentationController: UIPresentationController {
         guard let containerView = containerView,
               let presentedView = presentedView else { return .zero }
                 
-        let frame = containerView.bounds
+        let frame = containerView.bounds.inset(by: UIEdgeInsets(top: 0,
+                                                                left: 0,
+                                                                bottom: -containerView.safeAreaInsets.bottom,
+                                                                right: 0))
         
         let targetWidth = frame.width - 2 * widthInset
         let fittingSize = CGSize(width: targetWidth, height: UIView.layoutFittingCompressedSize.height)
