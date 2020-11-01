@@ -6,6 +6,9 @@
 import UIKit
 
 public class LMBottomSheetPresentationController: UIPresentationController {
+    
+    public var widthInset: CGFloat = 0
+    
     private lazy var grayBackground: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
@@ -36,9 +39,25 @@ public class LMBottomSheetPresentationController: UIPresentationController {
     }
     
     public override var frameOfPresentedViewInContainerView: CGRect {
-        guard let containerView = self.containerView else { return .zero }
-
-        return CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: containerView.intrinsicContentSize.height)
+        guard let containerView = containerView,
+              let presentedView = presentedView else { return .zero }
+                
+        let safeAreaFrame = containerView.bounds
+            .inset(by: containerView.safeAreaInsets)
+        
+        let targetWidth = safeAreaFrame.width - 2 * widthInset
+        let fittingSize = CGSize(width: targetWidth, height: UIView.layoutFittingCompressedSize.height)
+        
+        let targetHeight = presentedView.systemLayoutSizeFitting(fittingSize,
+                                                                 withHorizontalFittingPriority: .required,
+                                                                 verticalFittingPriority: .defaultLow).height
+        
+        var frame = safeAreaFrame
+        frame.origin.x += widthInset
+        frame.origin.y += frame.size.height - targetHeight
+        frame.size.width = targetWidth
+        frame.size.height = targetHeight
+        return frame
     }
     
     @objc private func grayBackgroundTapped() {
