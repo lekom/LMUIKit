@@ -14,11 +14,11 @@ public class LMBottomSheetAnimator: NSObject, UIViewControllerAnimatedTransition
     }
     
     // MARK: - UIViewControllerAnimatedTransitioning
-    func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
+    public func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return isPresentation ? 0.3 : 0.15
     }
     
-    func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
+    public func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         let key: UITransitionContextViewControllerKey = isPresentation ? .to : .from
         
         guard let controller = transitionContext.viewController(forKey: key) else { return }
