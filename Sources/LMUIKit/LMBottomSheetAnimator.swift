@@ -8,7 +8,7 @@ import UIKit
 public class LMBottomSheetAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     let isPresentation: Bool
     
-    init(isPresentation: Bool) {
+    public init(isPresentation: Bool) {
         self.isPresentation = isPresentation
         super.init()
     }
