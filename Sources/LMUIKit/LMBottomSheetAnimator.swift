@@ -5,7 +5,7 @@
 
 import UIKit
 
-class LMBottomSheetAnimator: NSObject, UIViewControllerAnimatedTransitioning {
+public class LMBottomSheetAnimator: NSObject, UIViewControllerAnimatedTransitioning {
     let isPresentation: Bool
     
     init(isPresentation: Bool) {
