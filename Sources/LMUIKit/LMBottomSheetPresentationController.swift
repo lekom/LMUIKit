@@ -38,7 +38,7 @@ public class LMBottomSheetPresentationController: UIPresentationController {
     public override var frameOfPresentedViewInContainerView: CGRect {
         guard let containerView = self.containerView else { return .zero }
 
-        return CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: containerView.frame.height)
+        return CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: containerView.intrinsicContentSize.height)
     }
     
     @objc private func grayBackgroundTapped() {
