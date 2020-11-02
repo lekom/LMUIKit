@@ -8,6 +8,11 @@ import UIKit
 public class LMBottomSheetPresentationController: UIPresentationController {
     
     public var widthInset: CGFloat = 0
+    public var showsGrayBackground: Bool = true {
+        didSet {
+            grayBackground.isHidden = !showsGrayBackground
+        }
+    }
     
     private lazy var grayBackground: UIView = {
         let view = UIView()
