@@ -110,7 +110,7 @@ public class LMBottomSheetPresentationController: UIPresentationController {
                     presentedViewController.dismiss(animated: true, completion: nil)
                 } else {
                     UIView.animate(withDuration: 0.15) {
-                        self.presentedViewController.view.frame = self.frameOfPresentedViewInContainerView
+                        self.presentedViewController.view.center = self.swipeOriginalPoint
                     }
                 }
             default:
