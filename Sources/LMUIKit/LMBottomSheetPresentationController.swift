@@ -131,10 +131,12 @@ public class LMBottomSheetPresentationController: UIPresentationController {
         }
         
         guard let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double,
-              let curve = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? UIView.AnimationOptions,
+              let curveInt = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? UInt,
               let keyboardFrameEnd = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {
             return
         }
+        
+        let curve = UIView.AnimationOptions(rawValue: curveInt)
         
         UIView.animate(withDuration: duration, delay: 0, options: [.beginFromCurrentState, curve], animations: {
             var frame = self.frameOfPresentedViewInContainerView
@@ -149,9 +151,11 @@ public class LMBottomSheetPresentationController: UIPresentationController {
         }
         
         guard let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double,
-              let curve = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? UIView.AnimationOptions else {
+              let curveInt = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? UInt else {
             return
         }
+        
+        let curve = UIView.AnimationOptions(rawValue: curveInt)
         
         UIView.animate(withDuration: duration, delay: 0, options: [.beginFromCurrentState, curve], animations: {
             self.presentedViewController.view.frame = self.frameOfPresentedViewInContainerView
