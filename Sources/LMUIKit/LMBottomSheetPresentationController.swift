@@ -7,6 +7,10 @@ import UIKit
 
 public class LMBottomSheetPresentationController: UIPresentationController {
     
+    private var swipeOffset: CGFloat = 0
+    private lazy var swipeOriginalPoint = CGPoint(x: frameOfPresentedViewInContainerView.midX, y: frameOfPresentedViewInContainerView.midY)
+    private var swipePreviousPoint: CGPoint = .zero
+    
     public var widthInset: CGFloat = 0
     public var showsGrayBackground: Bool = true {
         didSet {
@@ -73,12 +77,36 @@ public class LMBottomSheetPresentationController: UIPresentationController {
     }
     
     @objc private func handleSwipeToDismiss(sender: UIPanGestureRecognizer) {
-        let translation = sender.translation(in: presentedViewController.view)
+        guard let containerView = self.containerView else {
+            return
+        }
+        
+        let minDismissVelocity: CGFloat = 2000; // pt/s
+        let minDismissDistance: CGFloat = presentedViewController.view.bounds.height / 2
+        
+        swipeOffset = sender.translation(in: presentedViewController.view).y
+        
+        let distanceVector = CGPoint(x: presentedViewController.view.layer.position.x - swipeOriginalPoint.x,
+                                     y: presentedViewController.view.layer.position.y - swipeOriginalPoint.y)
+        
+        let distance = sqrt((distanceVector.x * distanceVector.x) + (distanceVector.y * distanceVector.y))
+        
+        let velocityVector = sender.velocity(in: containerView)
+        let velocity = sqrt((velocityVector.x * velocityVector.x) + (velocityVector.y * velocityVector.y))
+                
+        let goingDown = distanceVector.y > 0
+
         switch sender.state {
+            case .began:
+                swipeOriginalPoint = presentedViewController.view.center
+                swipePreviousPoint = swipeOriginalPoint
             case .changed:
-                presentedViewController.view.frame.origin.y = translation.y
+                swipePreviousPoint = presentedViewController.view.center
+                
+                presentedViewController.view.center = CGPoint(x: swipeOriginalPoint.x,
+                                                              y: swipeOriginalPoint.y + swipeOffset / (goingDown ? 1.0 : max(2.0, sqrt(distance))))
             case .ended:
-                if translation.y > 50 {
+                if goingDown && (velocity > minDismissVelocity || distance > minDismissDistance) {
                     presentedViewController.dismiss(animated: true, completion: nil)
                 }
             default:
