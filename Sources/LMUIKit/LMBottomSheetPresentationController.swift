@@ -108,6 +108,10 @@ public class LMBottomSheetPresentationController: UIPresentationController {
             case .ended:
                 if goingDown && (velocity > minDismissVelocity || distance > minDismissDistance) {
                     presentedViewController.dismiss(animated: true, completion: nil)
+                } else {
+                    UIView.animate(withDuration: 0.15) {
+                        self.presentedViewController.view.frame = self.frameOfPresentedViewInContainerView
+                    }
                 }
             default:
                 break
