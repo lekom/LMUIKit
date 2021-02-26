@@ -28,6 +28,9 @@ public class LMBottomSheetPresentationController: UIPresentationController {
         containerView.addSubview(grayBackground)
         containerView.addSubview(presentedViewController.view)
                 
+        presentedViewController.view.addGestureRecognizer(UIPanGestureRecognizer(target: self,
+                                                                                 action: #selector(handleSwipeToDismiss)))
+        
         let coordinator = presentingViewController.transitionCoordinator
         coordinator?.animate(alongsideTransition: { _ in
             self.grayBackground.alpha = 1.0
@@ -67,5 +70,19 @@ public class LMBottomSheetPresentationController: UIPresentationController {
     
     @objc private func grayBackgroundTapped() {
         presentedViewController.dismiss(animated: true, completion: nil)
+    }
+    
+    @objc private func handleSwipeToDismiss(sender: UIPanGestureRecognizer) {
+        let translation = sender.translation(in: presentedViewController.view)
+        switch sender.state {
+            case .changed:
+                presentedViewController.view.frame.origin.y = translation.y
+            case .ended:
+                if translation.y > 50 {
+                    presentedViewController.dismiss(animated: true, completion: nil)
+                }
+            default:
+                break
+        }
     }
 }
