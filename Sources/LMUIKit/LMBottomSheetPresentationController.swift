@@ -117,4 +117,44 @@ public class LMBottomSheetPresentationController: UIPresentationController {
                 break
         }
     }
+    
+    public override init(presentedViewController: UIViewController, presenting presentingViewController: UIViewController?) {
+        super.init(presentedViewController: presentedViewController, presenting: presentingViewController)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(onKeyboardShown), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(onKeyboardHidden), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc private func onKeyboardShown(notification: Notification) {
+        guard let userInfo = notification.userInfo else {
+            return
+        }
+        
+        guard let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double,
+              let curve = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? UIView.AnimationOptions,
+              let keyboardFrameEnd = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {
+            return
+        }
+        
+        UIView.animate(withDuration: duration, delay: 0, options: [.beginFromCurrentState, curve], animations: {
+            var frame = self.frameOfPresentedViewInContainerView
+            frame.size.height += keyboardFrameEnd.height
+            self.presentedViewController.view.frame = frame
+        }, completion: nil)
+    }
+    
+    @objc private func onKeyboardHidden(notification: Notification) {
+        guard let userInfo = notification.userInfo else {
+            return
+        }
+        
+        guard let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double,
+              let curve = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? UIView.AnimationOptions else {
+            return
+        }
+        
+        UIView.animate(withDuration: duration, delay: 0, options: [.beginFromCurrentState, curve], animations: {
+            self.presentedViewController.view.frame = self.frameOfPresentedViewInContainerView
+        }, completion: nil)
+    }
 }
