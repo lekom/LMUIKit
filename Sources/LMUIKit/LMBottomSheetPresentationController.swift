@@ -141,7 +141,7 @@ public class LMBottomSheetPresentationController: UIPresentationController {
         UIView.animate(withDuration: duration, delay: 0, options: [.beginFromCurrentState, curve], animations: {
             var frame = self.frameOfPresentedViewInContainerView
             // TODO: handle case were frame goes off the top of the screen!!!
-            frame.origin.y -= (keyboardFrameEnd.height - (UIApplication.shared.windows.first?.safeAreaInsets.bottom ?? 0))
+            frame.origin.y -= (keyboardFrameEnd.height - 2 * (self.containerView?.safeAreaInsets.bottom ?? 0))
             self.presentedViewController.view.frame = frame
         }, completion: nil)
     }
