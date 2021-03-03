@@ -11,6 +11,8 @@ public class LMBottomSheetPresentationController: UIPresentationController {
     private lazy var swipeOriginalPoint = CGPoint(x: frameOfPresentedViewInContainerView.midX, y: frameOfPresentedViewInContainerView.midY)
     private var swipePreviousPoint: CGPoint = .zero
     
+    private var keyboardHeight: CGFloat = 0
+    
     public var widthInset: CGFloat = 0
     public var showsGrayBackground: Bool = true {
         didSet {
@@ -69,6 +71,11 @@ public class LMBottomSheetPresentationController: UIPresentationController {
         frame.origin.y += frame.size.height - targetHeight
         frame.size.width = targetWidth
         frame.size.height = targetHeight + containerView.safeAreaInsets.bottom
+        
+        if keyboardHeight > 0 {
+            frame.origin.y -= (keyboardHeight - 2 * (self.containerView?.safeAreaInsets.bottom ?? 0))
+        }
+        
         return frame
     }
     
@@ -138,11 +145,10 @@ public class LMBottomSheetPresentationController: UIPresentationController {
         
         let curve = UIView.AnimationOptions(rawValue: curveInt)
         
+        self.keyboardHeight = keyboardFrameEnd.height
+        
         UIView.animate(withDuration: duration, delay: 0, options: [.beginFromCurrentState, curve], animations: {
-            var frame = self.frameOfPresentedViewInContainerView
-            // TODO: handle case were frame goes off the top of the screen!!!
-            frame.origin.y -= (keyboardFrameEnd.height - 2 * (self.containerView?.safeAreaInsets.bottom ?? 0))
-            self.presentedViewController.view.frame = frame
+            self.presentedViewController.view.frame = self.frameOfPresentedViewInContainerView
         }, completion: nil)
     }
     
@@ -157,6 +163,8 @@ public class LMBottomSheetPresentationController: UIPresentationController {
         }
         
         let curve = UIView.AnimationOptions(rawValue: curveInt)
+        
+        self.keyboardHeight = 0
         
         UIView.animate(withDuration: duration, delay: 0, options: [.beginFromCurrentState, curve], animations: {
             self.presentedViewController.view.frame = self.frameOfPresentedViewInContainerView
