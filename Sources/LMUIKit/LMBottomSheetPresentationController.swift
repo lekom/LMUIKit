@@ -73,7 +73,7 @@ public class LMBottomSheetPresentationController: UIPresentationController {
         frame.size.height = targetHeight + containerView.safeAreaInsets.bottom
         
         if keyboardHeight > 0 {
-            frame.origin.y -= (keyboardHeight - 2 * (self.containerView?.safeAreaInsets.bottom ?? 0))
+            frame.origin.y -= (keyboardHeight - containerView.safeAreaInsets.bottom)
         }
         
         return frame
@@ -169,9 +169,5 @@ public class LMBottomSheetPresentationController: UIPresentationController {
         UIView.animate(withDuration: duration, delay: 0, options: [.beginFromCurrentState, curve], animations: {
             self.presentedViewController.view.frame = self.frameOfPresentedViewInContainerView
         }, completion: nil)
-    }
-    
-    public override func preferredContentSizeDidChange(forChildContentContainer container: UIContentContainer) {
-        self.presentedViewController.view.frame = self.frameOfPresentedViewInContainerView
     }
 }
