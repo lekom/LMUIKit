@@ -170,4 +170,8 @@ public class LMBottomSheetPresentationController: UIPresentationController {
             self.presentedViewController.view.frame = self.frameOfPresentedViewInContainerView
         }, completion: nil)
     }
+    
+    public override func preferredContentSizeDidChange(forChildContentContainer container: UIContentContainer) {
+        self.presentedViewController.view.frame = self.frameOfPresentedViewInContainerView
+    }
 }
