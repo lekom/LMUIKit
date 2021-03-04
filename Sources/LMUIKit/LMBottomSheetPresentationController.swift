@@ -146,10 +146,16 @@ public class LMBottomSheetPresentationController: UIPresentationController {
         let curve = UIView.AnimationOptions(rawValue: curveInt)
         
         self.keyboardHeight = keyboardFrameEnd.height
-        
-        UIView.animate(withDuration: duration, delay: 0, options: [.beginFromCurrentState, curve], animations: {
-            self.presentedViewController.view.frame = self.frameOfPresentedViewInContainerView
-        }, completion: nil)
+
+        if self.presentedViewController.isBeingPresented {
+            presentingViewController.transitionCoordinator?.animate(alongsideTransition: { _ in
+                self.presentedViewController.view.frame = self.frameOfPresentedViewInContainerView
+            }, completion: nil)
+        } else {
+            UIView.animate(withDuration: duration, delay: 0, options: [.beginFromCurrentState, curve], animations: {
+                self.presentedViewController.view.frame = self.frameOfPresentedViewInContainerView
+            }, completion: nil)
+        }
     }
     
     @objc private func onKeyboardHidden(notification: Notification) {
