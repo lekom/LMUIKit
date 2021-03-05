@@ -154,7 +154,6 @@ public class LMBottomSheetPresentationController: UIPresentationController {
         } else {
             UIView.animate(withDuration: duration, delay: 0, options: [.beginFromCurrentState, curve], animations: {
                 self.presentedViewController.view.frame = self.frameOfPresentedViewInContainerView
-                self.presentedViewController.view.layoutIfNeeded()
             }, completion: nil)
         }
     }
