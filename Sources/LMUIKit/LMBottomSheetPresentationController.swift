@@ -133,6 +133,10 @@ public class LMBottomSheetPresentationController: UIPresentationController {
     }
     
     @objc private func onKeyboardShown(notification: Notification) {
+        guard presentedViewController.isTopMostController else {
+            return 
+        }
+        
         guard let userInfo = notification.userInfo else {
             return
         }
